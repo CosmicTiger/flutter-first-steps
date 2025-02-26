@@ -34,12 +34,16 @@ class _CounterFunctionsScreenState extends State<CounterFunctionsScreen> {
   }
 
   void onPressedSubstractAction() {
+    if (clickCounter == 0) {
+      return;
+    }
+
     setState(() {
       clickCounter -= 1;
     });
   }
 
-  void onPressedIconButton() {
+  void onPressedResetAction() {
     setState(() {
       clickCounter = 0;
     });
@@ -62,7 +66,7 @@ class _CounterFunctionsScreenState extends State<CounterFunctionsScreen> {
           // Important for this property is that it should be a list of widgets
           actions: [
             IconButton(
-                onPressed: onPressedIconButton,
+                onPressed: onPressedResetAction,
                 icon: const Icon(Icons.refresh_rounded)),
             // IconButton(
             //     onPressed: onPressedIconButton,
@@ -89,32 +93,45 @@ class _CounterFunctionsScreenState extends State<CounterFunctionsScreen> {
         )),
         floatingActionButton:
             Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-          FloatingActionButton(
-              shape: const StadiumBorder(),
-
-              /// during runtime due to the different breakpoints a device can have and have to adapt to
-              /// Scaffold widget changes, nonetheless, its children widgets can be constant
-              onPressed: onPressedAdditionAction,
-              child: const Icon(Icons.refresh_rounded)),
+          CustomButton(
+            icon: Icons.refresh_outlined,
+            onPressed: onPressedResetAction,
+          ),
           const SizedBox(height: 10),
-          // NOTE: FloatingActionButton is aligned by default at the top right corner of the Scaffold
-          FloatingActionButton(
-              shape: const StadiumBorder(),
-
-              /// during runtime due to the different breakpoints a device can have and have to adapt to
-              /// Scaffold widget changes, nonetheless, its children widgets can be constant
-              onPressed: onPressedAdditionAction,
-              child: const Icon(Icons.plus_one)),
-
+          CustomButton(
+            icon: Icons.plus_one,
+            onPressed: onPressedAdditionAction,
+          ),
           const SizedBox(height: 10),
-
-          FloatingActionButton(
-              shape: const StadiumBorder(),
-
-              /// during runtime due to the different breakpoints a device can have and have to adapt to
-              /// Scaffold widget changes, nonetheless, its children widgets can be constant
-              onPressed: onPressedSubstractAction,
-              child: const Icon(Icons.exposure_minus_1_outlined)),
+          CustomButton(
+            icon: Icons.exposure_minus_1_outlined,
+            onPressed: onPressedSubstractAction,
+          ),
         ]));
+  }
+}
+
+class CustomButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback? onPressed;
+
+  const CustomButton({
+    super.key,
+    required this.icon,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+        shape: const StadiumBorder(),
+        enableFeedback: true,
+        elevation: 5,
+        backgroundColor: Colors.blue,
+
+        /// during runtime due to the different breakpoints a device can have and have to adapt to
+        /// Scaffold widget changes, nonetheless, its children widgets can be constant
+        onPressed: onPressed,
+        child: Icon(icon));
   }
 }
